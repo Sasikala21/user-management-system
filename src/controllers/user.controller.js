@@ -3,6 +3,11 @@ const securePassword = require('../middlewares/bcrypt');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const authJWT = require('../middlewares/authJWT.js');
+const nodemailer = require('nodemailer');
+const emailConfig = require('../middlewares/emailConfig.js')
+const path = require('path');
+const fs = require('fs');
+
 exports.registerUser = async (req, res) => {
     try {
         const existingUser = await UserModel.findOne({ username: req.body.username });
@@ -21,11 +26,30 @@ exports.registerUser = async (req, res) => {
                     password: hashedPassword,
                     confirmPassword: hashedPassword,
                 };
+                const transporter = nodemailer.createTransport(emailConfig);
+                const emailTemplatePath = path.join(__dirname, '..', '..', 'htmlTemplate', 'confirmEmail.html');
+                const emailTemplate = fs.readFileSync(emailTemplatePath, 'utf8');
+                const emailContent = emailTemplate.replace('{{username}}', req.body.username);
+                const emailSent = await transporter.sendMail({
+                    from: process.env.EMAIL,
+                    to: user.email,
+                    subject: 'Confirmation Email',
+                    text: 'Confirmation Email',
+                    html: emailContent,
+                });
                 await UserModel.create(user);
+                if (emailSent) {
+                    return res.status(201).send({
+                        status: 'User registered Confirmation Email was sent!',
+                        statusCode: 201,
+                        message: `Confirmation Email was sent to ${user.email}`
+                    });
+                } 
                 return res.status(201).send({ status: 'Success', statusCode: 201, message: "User created successfully!!" });
             }
         }
     } catch (error) {
+        console.log(error,'error')
         return res.status(500).send({ status: 'Failure', statusCode: 500, message: error.message });
     }
 }

@@ -1,0 +1,52 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newsletter Subscription Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 40px;
+            padding: 10px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .logo {
+            margin-bottom: 20px;
+        }
+        .confirmation-text {
+            margin-bottom: 30px;
+        }
+        .confirmation-button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #4caf50;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <h1>Confirmation Email</h1>
+        </div>
+        <div class="confirmation-text">
+            <p>Hello {{username}},</p>
+            <p>Your account has been successfully created!</p>
+            <p><a>Confirm Email</a></p>
+            <p>If you did not signup this account, please ignore this email.</p>
+        </div>
+    </div>
+</body>
+</html>
